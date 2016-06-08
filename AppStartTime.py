@@ -1,6 +1,6 @@
 #!_*_coding=utf-8_*_
 
-import wx
+import wx,thread
 from core import cCode
 
 class Frame(wx.Frame):
@@ -20,12 +20,7 @@ class Frame(wx.Frame):
         t_num = wx.StaticText(parent=mPanel,label='次数:')
         self.e_num = wx.TextCtrl(parent=mPanel)        
         mSizer.Add(t_num,pos=(1,0),flag=wx.ALIGN_CENTER)
-        mSizer.Add(self.e_num,pos=(1,1),flag=wx.EXPAND)        
-        #
-        #t_result = wx.StaticText(parent=mPanel,label='结论:')
-        #e_result = wx.StaticText(parent=mPanel,style=wx.ALIGN_CENTER|wx.VSCROLL)        
-        #mSizer.Add(t_result,pos=(2,0),flag=wx.ALIGN_CENTER)
-        #mSizer.Add(e_result,pos=(2,1),flag=wx.EXPAND,span=(2,1))         
+        mSizer.Add(self.e_num,pos=(1,1),flag=wx.EXPAND)             
         #
         btn = wx.Button(parent=mPanel,label=u'执行')
         mSizer.Add(btn,pos=(3,0),flag=wx.ALIGN_CENTER)
@@ -54,7 +49,7 @@ class Frame(wx.Frame):
         flag = False
         if self.c_box.GetValue() == True:
             flag = True
-        cCode.C_Tools().startTimeLoop(pkgName,num,flag)
+        thread.start_new_thread(cCode.C_Tools().startTimeLoop,(pkgName,num,flag))
 
     def getActivity(self,event):
         self.t_show.SetValue(cCode.C_Tools().getCurrentActivity())
