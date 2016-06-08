@@ -11,12 +11,15 @@ class C_Tools():
             return True
         return False
     
-    def startTimeLoop(self,pkgName,num,sign):
+    def startTimeLoop(self,pkgName,num,sign,mtext):
+        
         _shell = 'adb shell am start -W %s'%pkgName
         _shell_stop = 'adb shell am force-stop %s'%pkgName.split('/')[0]
         time_list=[]
         for loop in range(int(num)):
+            mtext.SetValue(u'第%s次执行'%(loop+1))
             os.popen(_shell_stop)
+            
             if sign == True:
                 self.clearApp(pkgName)
             startTime = os.popen(_shell).read()
@@ -25,11 +28,12 @@ class C_Tools():
             time.sleep(5)
         os.popen(_shell_stop)
         self.saveToCSV(time_list, pkgName, num,sign)
-    
+        mtext.SetValue(u'执行完毕')
+        
     def saveToCSV(self,l_data,pkgName,num,sign):
         f = file('startTime.csv','a+')
         _writer = csv.writer(f)
-        _writer.writerow([pkgName,'是否清数据:%s'%str(sign)])
+        _writer.writerow([pkgName,'clean data?%s'%str(sign)])
         for item in l_data:
             _writer.writerow([item])
     
